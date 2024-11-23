@@ -1,101 +1,89 @@
-import Image from "next/image";
+'use client'
+import { useState, useRef } from "react";
+import html2canvas from 'html2canvas';
+import BusinessCard from "./components/BusinessCard";
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+export default function App() {
+  const [firstName, setfirstName] = useState<string>("")
+  const [lastName, setlastName] = useState<string>("")
+  const [companyName, setcompanyName] = useState<string>("")
+  const [positon, setPositon] = useState<string>("")
+  const [email, setEmail] = useState<string>("")
+  const [phoneNumber, setPhoneNumber] = useState<string>("")
+  const [color, setColor] = useState<string>("#E6E6E6");
+  const [textColor, setTextColor] = useState<string>("#00000");
+  const card = useRef<HTMLDivElement>(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  const handleDownloadImage = async () => {
+    const element = card.current;
+    const canvas = await html2canvas(element!);
+
+    const data = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+
+    if (typeof link.download === 'string') {
+      link.href = data;
+      link.download = 'image.png';
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      window.open(data);
+    }
+  };
+
+  return(
+    <div className={`w-1/2 bg-white justify-center flex flex-col p-5 rounded-lg place-self-center`}>
+    <input className={`text-black placeholder-slate-400 p-1 max-w-fit`} placeholder={`first name`} onChange={(e) => {
+      setfirstName(e.target.value)
+    }}/>
+    <input className={`text-black placeholder-slate-400 p-1 max-w-fit`} placeholder={`last name`} onChange={(e) => {
+      setlastName(e.target.value)
+    }}/>
+    <input className={`text-black placeholder-slate-400 p-1 max-w-fit`} placeholder={`position`} onChange={(e) => {
+      setPositon(e.target.value)
+    }}/>
+    <input className={`text-black placeholder-slate-400 p-1 max-w-fit`} placeholder={`company name`} onChange={(e) => {
+      setcompanyName(e.target.value)
+    }}/>
+    <input className={`text-black placeholder-slate-400 p-1 max-w-fit`} placeholder={`email`} onChange={(e) => {
+      setEmail(e.target.value)
+    }}/>
+    <input className={`text-black placeholder-slate-400 p-1 max-w-fit`} placeholder={`phone number`} onChange={(e) => {
+      setPhoneNumber(e.target.value)
+    }}/>
+
+   <div className={`flex flex-row space-x-5`}>
+    <span className={`flex flex-col justify-center items-center`}>
+    <label className={`text-black`}>
+      Background Color
+    </label>
+    <input
+    type={`color`}
+    value={color}
+    onChange={(e) => {
+      setColor(e.target.value)
+    }}
+    />
+    </span>
+    <span className={`flex flex-col justify-center items-center`}>
+    <label className={`text-black`}>
+      Text Color
+    </label>
+    <input
+    type={`color`}
+    value={textColor}
+    onChange={(e) => {
+      setTextColor(e.target.value)
+    }}
+    />
+    </span>
+   </div>
+    <BusinessCard firstName={firstName} lastName={lastName} companyName={companyName} position={positon} email={email} phoneNumber={phoneNumber} ref={card} color={color} textColor={textColor}/>
+    <button onClick={handleDownloadImage} className={`text-white bg-blue-600 rounded-md max-w-fit p-2.5 font-bold place-self-center hover:bg-blue-400 transition-all`}>
+      Download
+    </button>
     </div>
   );
 }
